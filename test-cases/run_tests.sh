@@ -46,6 +46,10 @@ cd /opt/cros-codecs
 
 #unzip ccdec.zip
 
+wget https://people.collabora.com/~detlev/cros-codecs-tests/iHD_drv_video.so
+mv iHD_drv_video.so /usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
+
+
 wget $CCDEC_URL
 chmod a+x ccdec
 
