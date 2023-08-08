@@ -13,52 +13,33 @@ CCDEC_URL="${2}"
 #CCDEC_TOKEN="${3}"
 
 SUPPORTED_CODECS="
+    vp8 \
     vp9 \
+    h.264 \
+    h.265 \
 "
 
-TEST_SUITES="
-    JVT-AVC_V1 \
-"
+TEST_SUITES_vp8="VP8-TEST-VECTORS"
+TEST_SUITES_vp9="VP9-TEST-VECTORS VP9-TEST-VECTORS-HIGH"
+TEST_SUITES_h264="JVT-AVC_V1 JVT-FR-EXT"
+TEST_SUITES_h265="JCT-VC-HEVC_V1"
 
 mkdir /opt/cros-codecs
 cd /opt/cros-codecs
-
-#ARTIFACTS=$(curl -L \
-#  -H "Accept: application/vnd.github+json" \
-#  -H "X-GitHub-Api-Version: 2022-11-28" \
-#  https://api.github.com/repos/cazou/cros-codecs/actions/artifacts)
-
-
-#archive_url=$(
-#for idx in $(seq 0 $(echo ${ARTIFACTS} | jq .total_count)); do
-#	if [ $(echo ${ARTIFACTS} | jq ".artifacts[${idx}].workflow_run.id") = ${CCDEC_RUN_ID} ]; then
-#		echo ${ARTIFACTS} | jq -M ".artifacts[${idx}].archive_download_url"
-#		break
-#	fi
-#done
-#)
-
-#curl -L -o ccdec.zip \
-#  -H "Accept: application/vnd.github+json" \
-#  -H "Authorization: Bearer ${CCDEC_TOKEN}" \
-#  -H "X-GitHub-Api-Version: 2022-11-28" \
-#  ${archive_url}
-
-#unzip ccdec.zip
 
 wget $CCDEC_URL
 chmod a+x ccdec
 
 export PATH=$PATH:/opt/cros-codecs
 
-ccdec --help
-
 for codec in ${SUPPORTED_CODECS}; do
 	${FLUSTER_DIR}/fluster.py run -d "ccdec-${codec}" -f junitxml -so results.xml 
-#	for ts in ${TEST_SUITES}; do
-#		/usr/bin/fluster_parser.py -ts JVT-AVC_V1 -d ccdec-${codec}
-#	done
-done
 
-ccdec ../fluster/fluster/../resources/VP9-TEST-VECTORS/vp90-2-00-quantizer-01.webm/vp90-2-00-quantizer-01.webm --output ../fluster/fluster/../results/VP9-TEST-VECTORS/vp90-2-00-quantizer-01.webm.out --input-format vp9 --output-format i420
+	suite_var_name="TEST_SUITES_${codec/./}"
+	eval "suites=\$$suite_var_name"
+	for ts in ${suites}; do
+		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec}
+		/usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec}
+	done
+done
 
