@@ -36,8 +36,6 @@ if [ "${SINGLE_RUN}" == "yes" ]; then
 fi
 
 for codec in ${SUPPORTED_CODECS}; do
-	${FLUSTER_DIR}/fluster.py run -d "ccdec-${codec}" -f junitxml -so results.xml ${FLUSTER_ARGS}
-
 	suite_var_name="TEST_SUITES_${codec/./}"
 	eval "suites=\$$suite_var_name"
 	for ts in ${suites}; do
