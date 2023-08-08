@@ -35,11 +35,15 @@ actions:
          from: git
          name: run_fluster
          path: test-cases/cros-codecs.yaml
+       - repository: https://github.com/cazou/cros-codecs-tests.git
+         branch: 'main'
+         history: False
+         from: git
+         name: run_fluster_single
+         path: test-cases/cros-codecs-single.yaml
     namespace: cros-codecs
-    results:
-      location: /home/cros/lava
     timeout:
-      minutes: 30
+      minutes: 120
 
 context:
   extra_kernel_args: console_msg_format=syslog earlycon
@@ -50,12 +54,12 @@ job_name: test-cros-codecs-debug
 priority: medium
 timeouts:
   action:
-    minutes: 30
+    minutes: 120
   actions:
     power-off:
       seconds: 30
   job:
-    minutes: 30
+    minutes: 120
   queue:
     days: 2
 visibility: public

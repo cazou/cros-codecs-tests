@@ -9,8 +9,7 @@
 
 FLUSTER_DIR="${1}"
 CCDEC_URL="${2}"
-#CCDEC_RUN_ID="${2}"
-#CCDEC_TOKEN="${3}"
+SINGLE_RUN="${3:-no}"
 
 SUPPORTED_CODECS="
     vp8 \
@@ -32,8 +31,12 @@ chmod a+x ccdec
 
 export PATH=$PATH:/opt/cros-codecs
 
+if [ "${SINGLE_RUN}" == "yes" ]; then
+	FLUSTER_ARGS="-j 1"
+fi
+
 for codec in ${SUPPORTED_CODECS}; do
-	${FLUSTER_DIR}/fluster.py run -d "ccdec-${codec}" -f junitxml -so results.xml 
+	${FLUSTER_DIR}/fluster.py run -d "ccdec-${codec}" -f junitxml -so results.xml ${FLUSTER_ARGS}
 
 	suite_var_name="TEST_SUITES_${codec/./}"
 	eval "suites=\$$suite_var_name"
