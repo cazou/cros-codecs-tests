@@ -47,8 +47,7 @@ actions:
 
 context:
   extra_kernel_args: console_msg_format=syslog earlycon
-#device_type: acer-R721T-grunt
-device_type: acer-cp514-2h-1160g7-volteer
+device_type: hp-x360-12b-ca0500na-n4000-octopus
 job_name: test-cros-codecs-debug
 
 priority: medium
