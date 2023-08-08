@@ -23,13 +23,15 @@ TEST_SUITES_vp9="VP9-TEST-VECTORS VP9-TEST-VECTORS-HIGH"
 TEST_SUITES_h264="JVT-AVC_V1 JVT-FR-EXT"
 TEST_SUITES_h265="JCT-VC-HEVC_V1"
 
-mkdir /opt/cros-codecs
-cd /opt/cros-codecs
+if [ ! -e /opt/cros-codecs/ccdec ]; then
+	mkdir /opt/cros-codecs
+	cd /opt/cros-codecs
 
-wget $CCDEC_URL
-chmod a+x ccdec
+	wget $CCDEC_URL
+	chmod a+x ccdec
 
-export PATH=$PATH:/opt/cros-codecs
+	export PATH=$PATH:/opt/cros-codecs
+fi
 
 if [ "${SINGLE_RUN}" == "yes" ]; then
 	FLUSTER_ARGS="-j 1"
@@ -39,7 +41,7 @@ for codec in ${SUPPORTED_CODECS}; do
 	suite_var_name="TEST_SUITES_${codec/./}"
 	eval "suites=\$$suite_var_name"
 	for ts in ${suites}; do
-		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec}
+		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${FLUSTER_ARGS}
 		/usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec}
 	done
 done
