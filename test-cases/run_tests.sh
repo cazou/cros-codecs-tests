@@ -47,10 +47,13 @@ for codec in ${SUPPORTED_CODECS}; do
 	eval "suites=\$$suite_var_name"
 	for ts in ${suites}; do
 		ts_lc=${ts,,}
-		skip_var_name="SKIP_VECTORS_${ts_lc/-/_}"
+		skip_var_name="SKIP_VECTORS_${ts_lc//-/_}"
 		eval "skip=\$$skip_var_name"
-		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${FLUSTER_ARGS}
-		/usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${FLUSTER_ARGS}
+		if [ "${skip}" != "" ]; then
+			SKIP_ARG="-sv ${skip}"
+		fi
+		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${SKIP_ARG} ${FLUSTER_ARGS}
+		/usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${SKIP_ARG} ${FLUSTER_ARGS}
 		rm -f results.xml
 	done
 done
