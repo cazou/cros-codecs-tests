@@ -34,9 +34,9 @@ if [ ! -e /opt/cros-codecs/ccdec ]; then
 
 	wget $CCDEC_URL
 	chmod a+x ccdec
-
-	export PATH=$PATH:/opt/cros-codecs
 fi
+
+export PATH=$PATH:/opt/cros-codecs
 
 if [ "${SINGLE_RUN}" == "yes" ]; then
 	FLUSTER_ARGS="-j 1"
@@ -51,6 +51,7 @@ for codec in ${SUPPORTED_CODECS}; do
 		eval "skip=\$$skip_var_name"
 		echo Running /usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${FLUSTER_ARGS}
 		/usr/bin/fluster_parser.py -ts ${ts} -d ccdec-${codec} ${FLUSTER_ARGS}
+		rm -f results.xml
 	done
 done
 
