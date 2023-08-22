@@ -4,6 +4,5 @@ metadata:
 
 run:
   steps:
-    # These should be set with variables from the github CI (WIP)
-    #- test-cases/run_tests.sh /opt/fluster "$RUN_ID" "$GH_BEARER"
     - test-cases/run_tests.sh /opt/fluster https://people.collabora.com/~detlev/cros-codecs-tests/ccdec
+#   - test-cases/run_tests.sh ${ARCH} ${CCDEC_BUILD_ID}

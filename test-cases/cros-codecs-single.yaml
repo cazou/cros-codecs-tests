@@ -5,3 +5,4 @@ metadata:
 run:
   steps:
     - test-cases/run_tests.sh /opt/fluster https://people.collabora.com/~detlev/cros-codecs-tests/ccdec yes
+#   - test-cases/run_tests.sh ${ARCH} ${CCDEC_BUILD_ID} yes

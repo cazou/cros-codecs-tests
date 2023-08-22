@@ -1,4 +1,20 @@
-#tags: ['cbg-5', 'chromeos', 'cros-codecs']
+context:
+  extra_kernel_args: console_msg_format=syslog earlycon
+device_type: {{ device_type }}
+job_name: Test cros-codecs on {{ arch }}
+
+priority: medium
+timeouts:
+  action:
+    minutes: 120
+  actions:
+    power-off:
+      seconds: 30
+  job:
+    minutes: 120
+  queue:
+    days: 2
+visibility: public
 
 actions:
 - deploy:
@@ -19,7 +35,6 @@ actions:
       minutes: 15
     to: tftp
 - boot:
-    namespace: modules
     commands: nfs
     method: depthcharge
     namespace: cros-codecs
@@ -35,30 +50,19 @@ actions:
          from: git
          name: run_fluster
          path: test-cases/cros-codecs.yaml
+         params:
+           CCDEC_BUILD_ID: {{ ccdec_build_id }}
+           ARCH: {{ arch }}
        - repository: https://github.com/cazou/cros-codecs-tests.git
          branch: 'main'
          history: False
          from: git
          name: run_fluster_single
          path: test-cases/cros-codecs-single.yaml
+         params:
+           CCDEC_BUILD_ID: {{ ccdec_build_id }}
+           ARCH: {{ arch }}
     namespace: cros-codecs
     timeout:
       minutes: 120
 
-context:
-  extra_kernel_args: console_msg_format=syslog earlycon
-device_type: hp-x360-12b-ca0500na-n4000-octopus
-job_name: test-cros-codecs-debug
-
-priority: medium
-timeouts:
-  action:
-    minutes: 120
-  actions:
-    power-off:
-      seconds: 30
-  job:
-    minutes: 120
-  queue:
-    days: 2
-visibility: public
