@@ -1,0 +1,19 @@
+name: Run tests
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Build
+      run: echo "I'm a binary" > binary
+    - name: Upload built binary artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: built-bin
+        path: binary
+
+
