@@ -1,0 +1,19 @@
+name: Run second tests
+
+on:
+  workflow_run:
+    workflows: ["Run tests"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  test-binary-somewhere:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: test
+      run: echo "I am running, here is my runid ${{ github.run_id }}"
+    - name: validation
+      run: echo "I am able to run because NOTHING was successful"
+
