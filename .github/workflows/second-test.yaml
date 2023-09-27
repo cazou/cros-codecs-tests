@@ -14,6 +14,4 @@ jobs:
     steps:
     - name: test
       run: echo "I am running, here is my runid ${{ github.run_id }}"
-    - name: validation
-      run: echo "I am able to run because NOTHING was successful"
 
